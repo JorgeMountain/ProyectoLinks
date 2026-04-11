@@ -166,6 +166,7 @@ export default function App() {
       <section className="hub-card">
         <header className="hero">
           <p className="eyebrow">Archivo personal</p>
+          <h1>Jorge Mountain</h1>
           {needsInteraction && (
             <p className="audio-hint">Toca la pantalla una vez para activar la musica.</p>
           )}
