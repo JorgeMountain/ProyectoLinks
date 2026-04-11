@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Enlaces principales del hub
 const linkCards = [
@@ -32,6 +32,26 @@ const linkCards = [
 ];
 
 export default function App() {
+  const audioRef = useRef(null);
+  const [needsInteraction, setNeedsInteraction] = useState(false);
+  const [audioMissing, setAudioMissing] = useState(false);
+
+  const startAudio = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) {
+      return;
+    }
+
+    try {
+      await audio.play();
+      setNeedsInteraction(false);
+      setAudioMissing(false);
+    } catch {
+      setNeedsInteraction(true);
+    }
+  };
+
   useEffect(() => {
     // Reveal suave al cargar
     const frame = requestAnimationFrame(() => {
@@ -41,16 +61,108 @@ export default function App() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
+  useEffect(() => {
+    startAudio();
+  }, []);
+
+  useEffect(() => {
+    if (!needsInteraction) {
+      return;
+    }
+
+    const unlockOnFirstAction = () => {
+      startAudio();
+    };
+
+    window.addEventListener("pointerdown", unlockOnFirstAction, { once: true });
+    window.addEventListener("keydown", unlockOnFirstAction, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlockOnFirstAction);
+      window.removeEventListener("keydown", unlockOnFirstAction);
+    };
+  }, [needsInteraction]);
+
   return (
     <main className="page-shell">
+      {/* Musica de fondo */}
+      <audio
+        ref={audioRef}
+        loop
+        preload="auto"
+        autoPlay
+        playsInline
+        src="/audio/love-theme.mp3"
+        onError={() => {
+          setAudioMissing(true);
+        }}
+      />
+
       {/* Capa atmosferica de fondo */}
       <div className="bg-layer" aria-hidden="true" />
+
+      {/* Escena japonesa animada y sutil */}
+      <div className="japan-scene" aria-hidden="true">
+        <span className="mountain mountain-back" />
+        <span className="mountain mountain-front" />
+        <span className="torii torii-a" />
+        <span className="torii torii-b" />
+        <span className="torii torii-c" />
+        <span className="torii torii-d" />
+        <span className="torii torii-e" />
+        <span className="torii torii-f" />
+        <span className="lantern-glow" />
+        <span className="cloud cloud-a" />
+        <span className="cloud cloud-b" />
+        <span className="cloud cloud-c" />
+        <span className="cloud cloud-d" />
+        <span className="cloud cloud-e" />
+        <span className="leaf leaf-a" />
+        <span className="leaf leaf-b" />
+        <span className="leaf leaf-c" />
+        <span className="leaf leaf-d" />
+        <span className="leaf leaf-e" />
+        <span className="leaf leaf-f" />
+        <span className="leaf leaf-g" />
+        <span className="leaf leaf-h" />
+        <span className="ground-line" />
+        <span className="train-track" />
+        <span className="train">
+          <span className="train-roof" />
+          <span className="train-headlight" />
+          <span className="train-window" />
+          <span className="train-window" />
+          <span className="train-window" />
+          <span className="train-door" />
+          <span className="train-window train-window-rear" />
+          <span className="train-tail-light" />
+        </span>
+      </div>
+
+      {/* Ornamentos animados sutiles */}
+      <div className="ambient" aria-hidden="true">
+        <span className="sigil sigil-a" />
+        <span className="sigil sigil-b" />
+        <span className="star star-a" />
+        <span className="star star-b" />
+        <span className="star star-c" />
+        <span className="star star-d" />
+        <span className="star star-e" />
+        <span className="star star-f" />
+        <span className="star star-g" />
+      </div>
 
       {/* Contenedor principal */}
       <section className="hub-card">
         <header className="hero">
           <p className="eyebrow">Archivo personal</p>
           <h1>Jorge Mountain</h1>
+          {needsInteraction && (
+            <p className="audio-hint">Toca la pantalla una vez para activar la musica.</p>
+          )}
+          {audioMissing && (
+            <p className="audio-hint">No encuentro el audio en `public/audio/love-theme.mp3`.</p>
+          )}
         </header>
 
         {/* Tarjetas de enlaces */}
@@ -68,10 +180,9 @@ export default function App() {
               <span className="icon-wrap">{card.icon}</span>
               <span className="card-text">
                 <strong>{card.name}</strong>
-                <small>Visitar perfil</small>
               </span>
               <span className="arrow" aria-hidden="true">
-                ↗
+                &rarr;
               </span>
             </a>
           ))}
