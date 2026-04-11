@@ -44,6 +44,12 @@ export default function App() {
     }
 
     try {
+      audio.muted = false;
+
+      if (audio.readyState < 2) {
+        audio.load();
+      }
+
       await audio.play();
       setNeedsInteraction(false);
       setAudioMissing(false);
@@ -75,10 +81,14 @@ export default function App() {
     };
 
     window.addEventListener("pointerdown", unlockOnFirstAction, { once: true });
+    window.addEventListener("touchstart", unlockOnFirstAction, { once: true });
+    window.addEventListener("click", unlockOnFirstAction, { once: true });
     window.addEventListener("keydown", unlockOnFirstAction, { once: true });
 
     return () => {
       window.removeEventListener("pointerdown", unlockOnFirstAction);
+      window.removeEventListener("touchstart", unlockOnFirstAction);
+      window.removeEventListener("click", unlockOnFirstAction);
       window.removeEventListener("keydown", unlockOnFirstAction);
     };
   }, [needsInteraction]);
@@ -156,7 +166,6 @@ export default function App() {
       <section className="hub-card">
         <header className="hero">
           <p className="eyebrow">Archivo personal</p>
-          <h1>Jorge Mountain</h1>
           {needsInteraction && (
             <p className="audio-hint">Toca la pantalla una vez para activar la musica.</p>
           )}
