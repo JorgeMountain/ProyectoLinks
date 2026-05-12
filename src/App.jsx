@@ -121,7 +121,10 @@ export default function App() {
 
       {/* Escena japonesa animada y sutil */}
       <div className="japan-scene" aria-hidden="true">
+        <span className="horizon-haze haze-a" />
+        <span className="horizon-haze haze-b" />
         <span className="mountain mountain-back" />
+        <span className="mountain mountain-mid" />
         <span className="mountain mountain-front" />
         <span className="torii torii-a" />
         <span className="torii torii-b" />
@@ -135,6 +138,7 @@ export default function App() {
         <span className="cloud cloud-c" />
         <span className="cloud cloud-d" />
         <span className="cloud cloud-e" />
+        <span className="cloud cloud-f" />
         <span className="leaf leaf-a" />
         <span className="leaf leaf-b" />
         <span className="leaf leaf-c" />
@@ -144,14 +148,21 @@ export default function App() {
         <span className="leaf leaf-g" />
         <span className="leaf leaf-h" />
         <span className="ground-line" />
+        <span className="rail-glow" />
+        <span className="catenary catenary-a" />
+        <span className="catenary catenary-b" />
         <span className="train-track" />
+        <span className="train-reflection" />
         <span className="train">
+          <span className="train-light-beam" />
           <span className="train-roof" />
+          <span className="train-line" />
           <span className="train-headlight" />
           <span className="train-window" />
           <span className="train-window" />
           <span className="train-window" />
           <span className="train-door" />
+          <span className="train-window train-window-rear" />
           <span className="train-window train-window-rear" />
           <span className="train-tail-light" />
         </span>
